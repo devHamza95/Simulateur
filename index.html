@@ -35,7 +35,8 @@
     function calculerPension() {
       const B5 = parseFloat(document.getElementById('points').value) || 0;
       const B12 = parseFloat(document.getElementById('cotisation').value) || 0;
-      const B15 = parseFloat(document.getElementById('abattement').value) || 0;
+      const B15_input = parseFloat(document.getElementById('abattement').value) || 0;
+      const B15 = B15_input * 41.67; // ✅ Conversion de l’abattement familial
 
       const B6 = 1.128;
       const B7 = B5 * B6;
@@ -70,13 +71,14 @@
         <span><strong>B12 (Cotisation mutuelle)</strong> : ${B12}</span>
         <span><strong>B13 (Net imposable)</strong> : ${B13.toFixed(2)}</span>
         <span><strong>B14 (IR avant abattement)</strong> : ${B14.toFixed(2)}</span>
-        <span><strong>B15 (Abattement familial)</strong> : ${B15}</span>
-        <span><strong>B16 (Abattement appliqué)</strong> : ${B16}</span>
+        <span><strong>B15 (Abattement familial saisi)</strong> : ${B15_input}</span>
+        <span><strong>B16 (Abattement familial appliqué = B15 × 41,67)</strong> : ${B16.toFixed(2)}</span>
         <span><strong>B17 (IR final)</strong> : ${B17.toFixed(2)}</span>
       `;
     }
   </script>
 </body>
 </html>
+
 
 
