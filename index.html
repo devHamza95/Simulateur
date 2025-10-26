@@ -10,7 +10,8 @@
     label { display: block; margin: 10px 0 5px; }
     input[type="number"] { width: 200px; padding: 5px; }
     button { margin-top: 20px; padding: 10px 15px; background: #3498db; color: white; border: none; cursor: pointer; }
-    .result { margin-top: 20px; font-size: 18px; color: green; }
+    .result, .details { margin-top: 20px; font-size: 16px; color: #2c3e50; }
+    .details span { display: block; margin: 5px 0; }
   </style>
 </head>
 <body>
@@ -25,9 +26,10 @@
   <label for="abattement">Abattement familial (B15) :</label>
   <input type="number" id="abattement" step="0.01">
 
-  <button onclick="calculerPension()">Calculer la pension nette</button>
+  <button onclick="calculerPension()">Calculer la pension</button>
 
   <div class="result" id="resultat"></div>
+  <div class="details" id="details"></div>
 
   <script>
     function calculerPension() {
@@ -56,7 +58,25 @@
       const B18 = B7 - B17 - B12;
 
       document.getElementById('resultat').innerText = `Pension nette : ${B18.toFixed(2)} MAD`;
+
+      document.getElementById('details').innerHTML = `
+        <span><strong>B5 (Nombre de points)</strong> : ${B5}</span>
+        <span><strong>B6 (Valeur du point)</strong> : ${B6}</span>
+        <span><strong>B7 (Pension brute)</strong> : ${B7.toFixed(2)}</span>
+        <span><strong>B8 (Plafond tranche 1)</strong> : ${B8.toFixed(2)}</span>
+        <span><strong>B9 (Abattement tranche 1)</strong> : ${B9.toFixed(2)}</span>
+        <span><strong>B10 (Tranche 2)</strong> : ${B10.toFixed(2)}</span>
+        <span><strong>B11 (Abattement tranche 2)</strong> : ${B11.toFixed(2)}</span>
+        <span><strong>B12 (Cotisation mutuelle)</strong> : ${B12}</span>
+        <span><strong>B13 (Net imposable)</strong> : ${B13.toFixed(2)}</span>
+        <span><strong>B14 (IR avant abattement)</strong> : ${B14.toFixed(2)}</span>
+        <span><strong>B15 (Abattement familial)</strong> : ${B15}</span>
+        <span><strong>B16 (Abattement appliqué)</strong> : ${B16}</span>
+        <span><strong>B17 (IR final)</strong> : ${B17.toFixed(2)}</span>
+      `;
     }
   </script>
 </body>
 </html>
+
+
