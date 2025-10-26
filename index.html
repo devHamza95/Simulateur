@@ -1,22 +1,35 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Calcul de Pension</title>
-  <style>
-    body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
-    h2 { color: #2c3e50; }
-    label { display: block; margin: 10px 0 5px; }
-    input[type="number"] { width: 200px; padding: 5px; }
-    button { margin-top: 20px; padding: 10px 15px; background: #3498db; color: white; border: none; cursor: pointer; }
-    .result, .details { margin-top: 20px; font-size: 16px; color: #2c3e50; }
-    .details span { display: block; margin: 5px 0; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Calculateurs Pension & Capital Brut</title>
+<style>
+  body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
+  h2 { color: #2c3e50; }
+  label { display: block; margin: 10px 0 5px; }
+  input[type="number"] { width: 220px; padding: 5px; }
+  button { margin-top: 15px; padding: 8px 12px; background: #3498db; color: white; border: none; cursor: pointer; border-radius: 6px; }
+  .tabs { margin-bottom: 20px; }
+  .tab { display: inline-block; margin-right: 10px; padding: 8px 12px; background: #ccc; cursor: pointer; border-radius: 4px; }
+  .tab.active { background: #3498db; color: white; }
+  .calculator { display: none; margin-top: 20px; }
+  .calculator.active { display: block; }
+  .result, .details { margin-top: 20px; font-size: 16px; color: #2c3e50; }
+  .details span { display: block; margin: 5px 0; }
+</style>
 </head>
 <body>
-  <h2>Calculateur de Pension</h2>
 
+<h2>Calculateurs Pension & Capital Brut</h2>
+
+<div class="tabs">
+  <div class="tab active" onclick="showCalculator('pension')">Pension</div>
+  <div class="tab" onclick="showCalculator('capital')">Capital Brut</div>
+</div>
+
+<!-- CALCULATEUR PENSION -->
+<div id="pension" class="calculator active">
   <label for="points">Nombre de points (B5) :</label>
   <input type="number" id="points" step="0.01">
 
@@ -28,57 +41,121 @@
 
   <button onclick="calculerPension()">Calculer la pension</button>
 
-  <div class="result" id="resultat"></div>
-  <div class="details" id="details"></div>
+  <div class="result" id="resultatPension"></div>
+  <div class="details" id="detailsPension"></div>
+</div>
 
-  <script>
-    function calculerPension() {
-      const B5 = parseFloat(document.getElementById('points').value) || 0;
-      const B12 = parseFloat(document.getElementById('cotisation').value) || 0;
-      const B15_input = parseFloat(document.getElementById('abattement').value) || 0;
-      const B15 = B15_input * 41.67; // ✅ Conversion de l’abattement familial
+<!-- CALCULATEUR CAPITAL -->
+<div id="capital" class="calculator">
+  <label for="capitalBrut">Capital Brut (C6) :</label>
+  <input type="number" id="capitalBrut" step="0.01">
 
-      const B6 = 1.128;
-      const B7 = B5 * B6;
-      const B8 = B7 < 14000 ? B7 : 14000;
-      const B9 = B7 < 14000 ? B7 * 0.30 : B8 * 0.30;
-      const B10 = B7 - B8;
-      const B11 = B10 <= 0 ? 0 : B10 * 0.60;
-      const B13 = B9 + B11 - B12;
+  <label for="nbDeduction">Nombre de déductions (C14) :</label>
+  <input type="number" id="nbDeduction" step="1">
 
-      let B14 = 0;
-      if (B13 > 0 && B13 <= 3333.33) B14 = 0;
-      else if (B13 <= 5000) B14 = B13 * 0.10 - 333.33;
-      else if (B13 <= 6666.67) B14 = B13 * 0.20 - 833.33;
-      else if (B13 <= 8333.33) B14 = B13 * 0.30 - 1500;
-      else if (B13 <= 15000) B14 = B13 * 0.34 - 1833.33;
-      else if (B13 > 15000) B14 = B13 * 0.37 - 2283.33;
+  <button onclick="calculerCapital()">Calculer le capital net</button>
 
-      const B16 = B15;
-      const B17 = Math.max(0, B14 - B16);
-      const B18 = B7 - B17 - B12;
+  <div class="result" id="resultatCapital"></div>
+  <div class="details" id="detailsCapital"></div>
+</div>
 
-      document.getElementById('resultat').innerText = `Pension nette : ${B18.toFixed(2)} MAD`;
+<script>
+// Onglets
+function showCalculator(id) {
+  document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+  document.querySelectorAll('.calculator').forEach(calc => calc.classList.remove('active'));
+  document.querySelector(`[onclick="showCalculator('${id}')"]`).classList.add('active');
+  document.getElementById(id).classList.add('active');
+}
 
-      document.getElementById('details').innerHTML = `
-        <span><strong>B5 (Nombre de points)</strong> : ${B5}</span>
-        <span><strong>B6 (Valeur du point)</strong> : ${B6}</span>
-        <span><strong>B7 (Pension brute)</strong> : ${B7.toFixed(2)}</span>
-        <span><strong>B8 (Plafond tranche 1)</strong> : ${B8.toFixed(2)}</span>
-        <span><strong>B9 (Abattement tranche 1)</strong> : ${B9.toFixed(2)}</span>
-        <span><strong>B10 (Tranche 2)</strong> : ${B10.toFixed(2)}</span>
-        <span><strong>B11 (Abattement tranche 2)</strong> : ${B11.toFixed(2)}</span>
-        <span><strong>B12 (Cotisation mutuelle)</strong> : ${B12}</span>
-        <span><strong>B13 (Net imposable)</strong> : ${B13.toFixed(2)}</span>
-        <span><strong>B14 (IR avant abattement)</strong> : ${B14.toFixed(2)}</span>
-        <span><strong>B15 (Abattement familial saisi)</strong> : ${B15_input}</span>
-        <span><strong>B16 (Abattement familial appliqué = B15 × 41,67)</strong> : ${B16.toFixed(2)}</span>
-        <span><strong>B17 (IR final)</strong> : ${B17.toFixed(2)}</span>
-      `;
-    }
-  </script>
+// CALCULATEUR PENSION
+function calculerPension() {
+  const B5 = parseFloat(document.getElementById('points').value) || 0;
+  const B12 = parseFloat(document.getElementById('cotisation').value) || 0;
+  const B15_input = parseFloat(document.getElementById('abattement').value) || 0;
+  const B15 = B15_input * 41.67; // valeur multipliée par 41,67
+
+  const B6 = 1.128;
+  const B7 = B5 * B6;
+  const B8 = B7 < 14000 ? B7 : 14000;
+  const B9 = B7 < 14000 ? B7 * 0.30 : B8 * 0.30;
+  const B10 = B7 - B8;
+  const B11 = B10 <= 0 ? 0 : B10 * 0.60;
+  const B13 = B9 + B11 - B12;
+
+  let B14 = 0;
+  if (B13 > 0 && B13 <= 3333.33) B14 = 0;
+  else if (B13 <= 5000) B14 = B13 * 0.10 - 333.33;
+  else if (B13 <= 6666.67) B14 = B13 * 0.20 - 833.33;
+  else if (B13 <= 8333.33) B14 = B13 * 0.30 - 1500;
+  else if (B13 <= 15000) B14 = B13 * 0.34 - 1833.33;
+  else if (B13 > 15000) B14 = B13 * 0.37 - 2283.33;
+
+  const B16 = B15;
+  const B17 = Math.max(0, B14 - B16);
+  const B18 = B7 - B17 - B12;
+
+  document.getElementById('resultatPension').innerText = `Pension nette : ${B18.toFixed(2)} MAD`;
+  document.getElementById('detailsPension').innerHTML = `
+    <span><strong>B5 (Nombre de points)</strong> : ${B5}</span>
+    <span><strong>B6 (Valeur du point)</strong> : ${B6}</span>
+    <span><strong>B7 (Pension brute)</strong> : ${B7.toFixed(2)}</span>
+    <span><strong>B8 (Plafond tranche 1)</strong> : ${B8.toFixed(2)}</span>
+    <span><strong>B9 (Abattement tranche 1)</strong> : ${B9.toFixed(2)}</span>
+    <span><strong>B10 (Tranche 2)</strong> : ${B10.toFixed(2)}</span>
+    <span><strong>B11 (Abattement tranche 2)</strong> : ${B11.toFixed(2)}</span>
+    <span><strong>B12 (Cotisation mutuelle)</strong> : ${B12}</span>
+    <span><strong>B13 (Net imposable)</strong> : ${B13.toFixed(2)}</span>
+    <span><strong>B14 (IR avant abattement)</strong> : ${B14.toFixed(2)}</span>
+    <span><strong>B15 (Abattement familial)</strong> : ${B15.toFixed(2)}</span>
+    <span><strong>B16 (Abattement appliqué)</strong> : ${B16.toFixed(2)}</span>
+    <span><strong>B17 (IR final)</strong> : ${B17.toFixed(2)}</span>
+  `;
+}
+
+// CALCULATEUR CAPITAL
+function calculerCapital() {
+  const C6 = parseFloat(document.getElementById('capitalBrut').value) || 0;
+  const C14 = parseFloat(document.getElementById('nbDeduction').value) || 0;
+
+  const C7 = C6 / 4;
+  const C8 = 14000 * 12;
+  const C9 = (C7 < C8) ? C7 * 0.3 : C8 * 0.3;
+  const C10 = (C7 - C8 < 0) ? 0 : C7 - C8;
+  const C11 = C10 * 0.6;
+  const C12 = C9 + C11;
+
+  let C13 = 0;
+  if (C12 >= 0 && C12 <= 40000) C13 = 0;
+  else if (C12 >= 40001 && C12 <= 60000) C13 = C12 * 0.10 - 4000;
+  else if (C12 >= 60001 && C12 <= 80000) C13 = C12 * 0.20 - 10000;
+  else if (C12 >= 80001 && C12 <= 100000) C13 = C12 * 0.30 - 18000;
+  else if (C12 >= 100001 && C12 <= 180000) C13 = C12 * 0.34 - 22000;
+  else if (C12 >= 180001) C13 = C12 * 0.37 - 27400;
+  else C13 = 0;
+
+  const C15 = C14 * 500;
+  const C16 = Math.max(0, (C13 - C15) * 4);
+  const C17 = C6 - C16;
+
+  document.getElementById('resultatCapital').innerText = `💰 Capital net : ${C17.toFixed(2)} MAD`;
+  document.getElementById('detailsCapital').innerHTML = `
+    <span><strong>C6 - Capital Brut</strong> : ${C6.toFixed(2)}</span>
+    <span><strong>C7 - Capital / 4 ans</strong> : ${C7.toFixed(2)}</span>
+    <span><strong>C8 - Plafond tranche 1</strong> : ${C8.toFixed(2)}</span>
+    <span><strong>C9 - Abattement 70%</strong> : ${C9.toFixed(2)}</span>
+    <span><strong>C10 - 2ème tranche</strong> : ${C10.toFixed(2)}</span>
+    <span><strong>C11 - Abattement tranche 2</strong> : ${C11.toFixed(2)}</span>
+    <span><strong>C12 - Net imposable (C9 + C11)</strong> : ${C12.toFixed(2)}</span>
+    <span><strong>C13 - IR annuel</strong> : ${C13.toFixed(2)}</span>
+    <span><strong>C14 - Nombre de déductions</strong> : ${C14}</span>
+    <span><strong>C15 - Abattement familial</strong> : ${C15.toFixed(2)}</span>
+    <span><strong>C16 - IR global</strong> : ${C16.toFixed(2)}</span>
+    <span><strong>C17 - Capital net</strong> : ${C17.toFixed(2)}</span>
+  `;
+}
+</script>
 </body>
 </html>
-
 
 
