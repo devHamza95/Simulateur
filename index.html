@@ -95,7 +95,7 @@ function calculerPension() {
   const B17 = Math.max(0, B14 - B16);
   const B18 = B7 - B17 - B12;
 
-  document.getElementById('resultatPension').innerText = `Pension nette : ${B18.toFixed(2)} MAD`;
+document.getElementById('resultatPension').innerHTML = `<span style="color: green; font-weight: bold;">Pension nette : ${B18.toFixed(2)} MAD</span>`;
   document.getElementById('detailsPension').innerHTML = `
     <span><strong> Nombre de points </strong> : ${B5}</span>
     <span><strong> Valeur du point </strong> : ${B6}</span>
@@ -157,6 +157,7 @@ function calculerCapital() {
 </script>
 </body>
 </html>
+
 
 
 
