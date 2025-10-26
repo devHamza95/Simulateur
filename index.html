@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Calculateurs Pension & Capital Brut</title>
+<title>Calculateurs Pension & Capital Brut By Khalid AOUAD </title>
 <style>
   body { font-family: Arial, sans-serif; padding: 20px; background: #f9f9f9; }
   h2 { color: #2c3e50; }
@@ -21,22 +21,22 @@
 </head>
 <body>
 
-<h2>Calculateurs Pension & Capital Brut</h2>
+<h2>Calculateurs Pension & Capital By Khalid AOUAD </h2>
 
 <div class="tabs">
   <div class="tab active" onclick="showCalculator('pension')">Pension</div>
-  <div class="tab" onclick="showCalculator('capital')">Capital Brut</div>
+  <div class="tab" onclick="showCalculator('capital')">Capital </div>
 </div>
 
 <!-- CALCULATEUR PENSION -->
 <div id="pension" class="calculator active">
-  <label for="points">Nombre de points (B5) :</label>
+  <label for="points">Nombre de points :</label>
   <input type="number" id="points" step="0.01">
 
-  <label for="cotisation">Cotisation mutuelle mensuelle (B12) :</label>
+  <label for="cotisation">Cotisation mutuelle mensuelle  :</label>
   <input type="number" id="cotisation" step="0.01">
 
-  <label for="abattement">Abattement familial (B15) :</label>
+  <label for="abattement">Abattement familial :</label>
   <input type="number" id="abattement" step="0.01">
 
   <button onclick="calculerPension()">Calculer la pension</button>
@@ -47,10 +47,10 @@
 
 <!-- CALCULATEUR CAPITAL -->
 <div id="capital" class="calculator">
-  <label for="capitalBrut">Capital Brut (C6) :</label>
+  <label for="capitalBrut">Capital Brut :</label>
   <input type="number" id="capitalBrut" step="0.01">
 
-  <label for="nbDeduction">Nombre de déductions (C14) :</label>
+  <label for="nbDeduction">Nombre de déductions  :</label>
   <input type="number" id="nbDeduction" step="1">
 
   <button onclick="calculerCapital()">Calculer le capital net</button>
@@ -97,19 +97,19 @@ function calculerPension() {
 
   document.getElementById('resultatPension').innerText = `Pension nette : ${B18.toFixed(2)} MAD`;
   document.getElementById('detailsPension').innerHTML = `
-    <span><strong>B5 (Nombre de points)</strong> : ${B5}</span>
-    <span><strong>B6 (Valeur du point)</strong> : ${B6}</span>
-    <span><strong>B7 (Pension brute)</strong> : ${B7.toFixed(2)}</span>
-    <span><strong>B8 (Plafond tranche 1)</strong> : ${B8.toFixed(2)}</span>
-    <span><strong>B9 (Abattement tranche 1)</strong> : ${B9.toFixed(2)}</span>
-    <span><strong>B10 (Tranche 2)</strong> : ${B10.toFixed(2)}</span>
-    <span><strong>B11 (Abattement tranche 2)</strong> : ${B11.toFixed(2)}</span>
-    <span><strong>B12 (Cotisation mutuelle)</strong> : ${B12}</span>
-    <span><strong>B13 (Net imposable)</strong> : ${B13.toFixed(2)}</span>
-    <span><strong>B14 (IR avant abattement)</strong> : ${B14.toFixed(2)}</span>
-    <span><strong>B15 (Abattement familial)</strong> : ${B15.toFixed(2)}</span>
-    <span><strong>B16 (Abattement appliqué)</strong> : ${B16.toFixed(2)}</span>
-    <span><strong>B17 (IR final)</strong> : ${B17.toFixed(2)}</span>
+    <span><strong> Nombre de points </strong> : ${B5}</span>
+    <span><strong> Valeur du point </strong> : ${B6}</span>
+    <span><strong> Pension brute </strong> : ${B7.toFixed(2)}</span>
+    <span><strong> Plafond tranche 1 </strong> : ${B8.toFixed(2)}</span>
+    <span><strong> Abattement tranche 1 </strong> : ${B9.toFixed(2)}</span>
+    <span><strong> Tranche 2 </strong> : ${B10.toFixed(2)}</span>
+    <span><strong> Abattement tranche 2 </strong> : ${B11.toFixed(2)}</span>
+    <span><strong> Cotisation mutuelle </strong> : ${B12}</span>
+    <span><strong> Net imposable </strong> : ${B13.toFixed(2)}</span>
+    <span><strong> IR avant abattement </strong> : ${B14.toFixed(2)}</span>
+    <span><strong> Abattement familial </strong> : ${B15.toFixed(2)}</span>
+    <span><strong> Abattement appliqué </strong> : ${B16.toFixed(2)}</span>
+    <span><strong> IR final </strong> : ${B17.toFixed(2)}</span>
   `;
 }
 
@@ -140,22 +140,23 @@ function calculerCapital() {
 
   document.getElementById('resultatCapital').innerText = `💰 Capital net : ${C17.toFixed(2)} MAD`;
   document.getElementById('detailsCapital').innerHTML = `
-    <span><strong>C6 - Capital Brut</strong> : ${C6.toFixed(2)}</span>
-    <span><strong>C7 - Capital / 4 ans</strong> : ${C7.toFixed(2)}</span>
-    <span><strong>C8 - Plafond tranche 1</strong> : ${C8.toFixed(2)}</span>
-    <span><strong>C9 - Abattement 70%</strong> : ${C9.toFixed(2)}</span>
-    <span><strong>C10 - 2ème tranche</strong> : ${C10.toFixed(2)}</span>
-    <span><strong>C11 - Abattement tranche 2</strong> : ${C11.toFixed(2)}</span>
-    <span><strong>C12 - Net imposable (C9 + C11)</strong> : ${C12.toFixed(2)}</span>
-    <span><strong>C13 - IR annuel</strong> : ${C13.toFixed(2)}</span>
-    <span><strong>C14 - Nombre de déductions</strong> : ${C14}</span>
-    <span><strong>C15 - Abattement familial</strong> : ${C15.toFixed(2)}</span>
-    <span><strong>C16 - IR global</strong> : ${C16.toFixed(2)}</span>
-    <span><strong>C17 - Capital net</strong> : ${C17.toFixed(2)}</span>
+    <span><strong> Capital Brut </strong> : ${C6.toFixed(2)}</span>
+    <span><strong> Capital / 4 ans </strong> : ${C7.toFixed(2)}</span>
+    <span><strong> Plafond tranche 1 </strong> : ${C8.toFixed(2)}</span>
+    <span><strong> Abattement 70% </strong> : ${C9.toFixed(2)}</span>
+    <span><strong> 2ème tranche </strong> : ${C10.toFixed(2)}</span>
+    <span><strong> Abattement tranche </strong> : ${C11.toFixed(2)}</span>
+    <span><strong> Net imposable </strong> : ${C12.toFixed(2)}</span>
+    <span><strong> IR annuel </strong> : ${C13.toFixed(2)}</span>
+    <span><strong> Nombre de déductions </strong> : ${C14}</span>
+    <span><strong> Abattement familial </strong> : ${C15.toFixed(2)}</span>
+    <span><strong> IR global </strong> : ${C16.toFixed(2)}</span>
+    <span><strong> Capital net </strong> : ${C17.toFixed(2)}</span>
   `;
 }
 </script>
 </body>
 </html>
+
 
 
